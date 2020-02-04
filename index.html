@@ -10,22 +10,76 @@
 		iframe {
 			width: 800px;
 			height: 100vh;
-			float: right;
 		}
 		button {
 			border-radius: 5px;
 			padding: 10px 20px;
 			background-color: #FF5722;
     		color: #fff;
-    		float: left;
+    		width: 125px;
+    		margin-top: 2px;
+		}
+		.flex-container {
+			display: flex;
+		}
+		.side {
+			flex: 30%;
+		}
+		.content {
+			flex: 70%;
+		}
+		iframe {
+			border: 0;
+		}
+		ul {
+			list-style-type: none;
+			/*display: inline-block;*/
+		}
+		.header {
+			background-color: #FF5722;
+		}
+		.header p {
+			font-family: calibri;
+			color: #fff;
+			margin-left: 44px;
+			margin-top: 0;
+			margin-bottom: 0;
+			padding: 17px 0;
+			font-size: 18px;
+		}
+		select {
+			margin-left: 45px;
+			padding: 10px 5px;
 		}
 	</style>
 </head>
 <body>
-<button id="btnPDF">Print Preview</button>
-<button>Download</button>
-<iframe id="iframePDF" src=""></iframe>
-<img style="display: none" id="govLogo" src="img/govLogo2.jfif">
+	<div class="flex-container">
+		<div class="side">
+			<div class="header">
+				<p>Testing Phase</p>
+			</div>
+			<img style="display: none" id="govLogo" src="img/govLogo2.jfif">
+			<ul>
+				<li>
+					<button id="btnPDF">Print Preview</button>
+				</li>
+				<li>
+					<button>Download</button>
+				</li>
+			</ul>
+			<select>
+				<option>Social Services</option>
+				<option>Agriculture</option>
+				<option>Agriculture</option>
+			</select>
+		</div>
+		<div class="content">
+			<iframe id="iframePDF" src=""></iframe>
+		</div>
+	</div>
+
+
 <script src="https://cdn.jsdelivr.net/g/filesaver.js"></script>
 <script src="https://unpkg.com/jspdf@1.5.3/dist/jspdf.min.js"></script>
 <script src="https://unpkg.com/jspdf-autotable@3.2.11/dist/jspdf.plugin.autotable.js"></script>
