@@ -120,8 +120,6 @@
 				this.format = this.size[format]
 			}else {
 				this.format = this.size['a4']
-				this.errorMsg = `'${format}' is an unrecognizable format. Please choose a defined format from the list []. Format will now be set to default 'A4' size`
-				console.error(this.errorMsg)
 			}
 		}
 		getWidth() {
@@ -163,21 +161,35 @@
 	}
 
 	docs.socialService = function() {
-		page = new pageClass('legal')
 		offsetY = 50
-		let doc = new jsPDF('portrait', 'pt', page.format)
+		strSpacing = 15
+		strHeadMargin = 30
+		page = new pageClass('legal')
+		doc = new jsPDF('portrait', 'pt', page.format)
 
 		docAddGovHeader(doc)
 		doc.setFontSize(10)
 		doc.setFontType('bold')
 		doc.text('SOCIAL CASE STUDY', page.alignCenter(), offsetY+115, 'center')
-		doc.setFontSize(13)
+		doc.setFontSize(12)
 		doc.text('I.', page.alignLeft(), 210)
-		let strHeadMargin = 30
 		doc.text('IDENTIFYING DATA', page.alignLeft()+strHeadMargin, 210)
 		doc.setFontSize(12)
 		doc.setFontType('normal')
-		strSpacing = 15
+		
+		let strIntroduction = [['Name', 'Roger Pantil'],['Age', '16'],['address', 'Digos City'], ['Sex', 'Male'], ['Civil Status', 'Single'], ['Date of Birth', '05/09/94'], ['Place of Birth', 'Digos City'], ['Educational Attainment', 'Bachelor In Information Technology'], ['Occupation & Income', 'Programmer and 280'], ['Net Income','4000']]
+
+		// strIntroduction.map((str, index) => {
+		// 	console.log(str[0])
+		// 	let property = str[0] + ':'
+		// 	let value = str[1] 
+		// 	doc.setFontType('bold')
+		// 	doc.text(property, page.alignLeft()+strHeadMargin, 238+strSpacing*(index+1))
+		// 	doc.setFontType('normal')
+		// 	propertWidth = doc.getTextWidth(property)
+		// 	doc.text(value, page.alignLeft()+strHeadMargin+propertWidth+10, 238+strSpacing*(index+1))
+		// })
+
 		doc.text('Name: Roger Pantil',page.alignLeft()+strHeadMargin, 238)
 		doc.text('Age: 16',page.alignLeft()+strHeadMargin, 238+strSpacing)
 		doc.text('Sex: Male',page.alignLeft()+strHeadMargin, 238+strSpacing*2)
