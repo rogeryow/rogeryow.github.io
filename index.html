@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0 ;
+		}
+		iframe {
+			width: 800px;
+			height: 100vh;
+			float: right;
+		}
+		button {
+			border-radius: 5px;
+			padding: 10px 20px;
+			background-color: #FF5722;
+    		color: #fff;
+    		float: left;
+		}
+	</style>
+</head>
+<body>
+<button id="btnPDF">Print Preview</button>
+<button>Download</button>
+<iframe id="iframePDF" src=""></iframe>
+<img style="display: none" id="govLogo" src="img/govLogo2.jfif">
+<script src="https://cdn.jsdelivr.net/g/filesaver.js"></script>
+<script src="https://unpkg.com/jspdf@1.5.3/dist/jspdf.min.js"></script>
+<script src="https://unpkg.com/jspdf-autotable@3.2.11/dist/jspdf.plugin.autotable.js"></script>
+<script src="js/main.js"></script>
+
+
+<script type="text/javascript">
+	btnPDF = document.getElementById('btnPDF')
+	let strSample = [['Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure? At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains. On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.']]
+	
+	let docs = {}	
+	
+	document.addEventListener('DOMContentLoaded', function() {
+			pdfToIframe(docs.socialService(), 'iframePDF')
+		// btnPDF.addEventListener('click', function() {
+		// 	pdfToIframe(docs.socialService(), 'iframePDF')
+		// 	pdfToWindow(docs.socialService())
+		// })
+	})
+
+	function getBase64Image(img) {
+		let canvas = document.createElement('canvas')
+		canvas.width = img.width
+		canvas.height = img.height
+		let ctx = canvas.getContext('2d')
+		ctx.drawImage(img, 0, 0)
+		let dataURL = canvas.toDataURL('image/png')
+		return dataURL.replace(/^data:image\/(png|jpg);base64,/, '')
+	}
+
+	class pageClass {
+		size = {
+			a4: [612, 950],
+			legal: [612, 950],
+			short: [612, 950],
+		}
+		leftMargin = 45
+		constructor(format) {			
+			if (this.size.hasOwnProperty(format)) {
+				this.format = this.size[format]
+			}else {
+				this.format = this.size['a4']
+				this.errorMsg = `'${format}' is an unrecognizable format. Please choose a defined format from the list []. Format will now be set to default 'A4' size`
+				console.error(this.errorMsg)
+			}
+		}
+		getWidth() {
+			return this.format[0]
+		}
+		getHeight() {
+			return this.format[1]
+		}
+		alignLeft() {
+			return this.leftMargin
+		}
+		alignCenter() {
+			return this.format[0]/2
+		}
+	}
+
+	function docAddGovHeader(doc) {
+		let govLogo = document.getElementById('govLogo')
+		let base64GovLogo = getBase64Image(govLogo)
+		doc.addImage(base64GovLogo, 'PNG', page.alignLeft(), 42, 80, 80)
+		doc.setFontSize(11)
+		doc.text('Republic of the Philippines', page.alignCenter(), offsetY, 'center')
+		doc.text('Province of Davao del Sur', page.alignCenter(), offsetY+14, 'center')
+		doc.setFontType('bold')
+		doc.text('CITY OF DIGOS', page.alignCenter(), offsetY+31, 'center')
+		doc.setFontSize(14)
+		doc.text('OFFICE OF THE CITY MAYOR', page.alignCenter(), offsetY+48, 'center')
+		doc.setFontSize(11)
+		doc.text('CITY SPECIAL PROGRAM AND MANAGEMENT OFFICE', page.alignCenter(), offsetY+62, 'center')
+		doc.setFontSize(14)
+		let header = 'SOCIAL SERVICES' 
+		doc.text(header, page.alignCenter(), offsetY+78, 'center')
+		doc.line(page.alignLeft()+198, 131, page.getWidth()-243, 131)
+	}
+
+	docs.socialService = function() {
+		page = new pageClass('legal')
+		offsetY = 50
+		let doc = new jsPDF('portrait', 'pt', page.format)
+
+		docAddGovHeader(doc)
+
+		doc.autoTable({
+			startY: 150,
+			head: [['intro']],
+			body: strSample,
+			theme: 'plain',	
+			styles: {
+				overflow: 'linebreak',
+				halign: 'justify',
+				fontSize: 12,
+			}
+		})
+
+		return doc
+	}
+
+	docs.agriculture = function() {
+
+	}
+
+	function pdfDownload(doc) {
+		doc.save('autoprint.pdf')
+	}
+
+	function pdfToWindow(doc) {
+		// doc.autoPrint({letiant: 'non-conform'});
+		doc.output('dataurlnewwindow')
+	}
+
+	function pdfToIframe(doc, iframeID) {
+		let blob = doc.output('blob')
+		let blobURL = URL.createObjectURL(blob)
+		iframePDF = document.getElementById(iframeID)
+		iframePDF.src = blobURL
+	}
+</script>
+</body>
+</html>
+
