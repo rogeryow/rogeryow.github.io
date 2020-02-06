@@ -59,7 +59,7 @@
 			<div class="header">
 				<p>Testing Phase</p>
 			</div>
-			<img style="display: none" id="govLogo" src="img/govLogo2.jfif">
+			<!-- <img style="display: none" id="govLogo" src="img/govLogo2.jfif"> -->
 			<ul>
 				<li>
 					<button id="btnPDF">Print Preview</button>
@@ -84,12 +84,11 @@
 <script src="https://unpkg.com/jspdf@1.5.3/dist/jspdf.min.js"></script>
 <script src="https://unpkg.com/jspdf-autotable@3.2.11/dist/jspdf.plugin.autotable.js"></script>
 <script src="js/main.js"></script>
-
+<script type="text/javascript" src="base64/img.js"></script>
 
 <script type="text/javascript">
 	btnPDF = document.getElementById('btnPDF')	
 	let docs = {}	
-	
 	document.addEventListener('DOMContentLoaded', function() {
 			pdfToIframe(docs.socialService(), 'iframePDF')
 		// btnPDF.addEventListener('click', function() {
@@ -137,9 +136,11 @@
 	}
 
 	function docAddGovHeader(doc) {
-		let govLogo = document.getElementById('govLogo')
-		let base64GovLogo = getBase64Image(govLogo)
-		doc.addImage(base64GovLogo, 'PNG', page.alignLeft(), 42, 80, 80)
+			// html logo
+			// let govLogo = document.getElementById('govLogo')
+			// let base64GovLogo = getBase64Image(govLogo)
+		// base64 logo
+		doc.addImage(img.govLogo, 'PNG', page.alignLeft(), 42, 80, 80)
 		doc.setFontSize(11)
 		doc.text('Republic of the Philippines', page.alignCenter(), offsetY, 'center')
 		doc.text('Province of Davao del Sur', page.alignCenter(), offsetY+14, 'center')
@@ -170,6 +171,7 @@
 		docAddGovHeader(doc)
 		doc.setFontSize(10)
 		doc.setFontType('bold')
+
 		doc.text('SOCIAL CASE STUDY', page.alignCenter(), offsetY+115, 'center')
 		doc.setFontSize(12)
 		doc.text('I.', page.alignLeft(), 210)
@@ -247,7 +249,7 @@
 		doc.autoTable({
 			startY: problemFinalY + 50,
 			body: [
-				['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?'],
+				['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.'],
 			],
 			theme: 'plain',	
 			styles: {
