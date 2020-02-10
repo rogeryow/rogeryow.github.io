@@ -69,6 +69,9 @@ class Page {
 	alignLeft() {
 		return this.leftMargin
 	}
+	alignRight() {
+		return this.format[0] - this.leftMargin
+	}
 	alignCenter() {
 		return this.format[0]/2
 	}
@@ -92,7 +95,7 @@ function docAddGovHeader(doc) {
 	doc.setFontSize(14)
 	let header = 'SOCIAL SERVICES' 
 	doc.text(header, page.alignCenter(), offsetY+78, 'center')
-	doc.text(drawUnderline(doc.getTextWidth(header)), page.alignCenter(), offsetY+78, 'center')
+	doc.text(drawUnderline(doc.getTextWidth(header) -5), page.alignCenter(), offsetY+78, 'center')
 	setSizeAndFont(12, 'normal')
 	let strDate = 'Date: ______________'
 	let strDateSize = doc.getTextWidth(strDate)
@@ -100,13 +103,14 @@ function docAddGovHeader(doc) {
 
 }
 
-function drawUnderline(textWidth) {
+function drawUnderline(width) {
 	let line = '_'
-	let lineSize = doc.getTextWidth(line)
-	let totalLines = Math.floor(textWidth / lineSize) 
+	let textWidth = Math.round(width)
+	let lineSize = Math.round(doc.getTextWidth(line))
+	let totalLines = Math.round(textWidth / lineSize) 
 	let underline = ''
 	
-	for (i = 0; i < totalLines; i++) {
+	for (i = 0; i <= totalLines; i++) {
 		underline += line
 	}	
 
@@ -189,7 +193,26 @@ docs.sss = function() {
 			})		
 		})	
 	})
+
+	doc.setFontType('normal')
+	let prevTable = doc.previousAutoTable.finalY + 35
+
+	let name1 = sss.signature[0]
+	let name1Width = doc.getTextWidth(name1)
+	doc.text('Noted by:', page.alignLeft(), prevTable + 60)
+	doc.text(name1, page.alignLeft(), prevTable + 100)
+	doc.text(drawUnderline(name1Width), page.alignLeft(), prevTable + 100)
+	doc.text('Program Head', page.alignLeft()+name1Width/2, prevTable + 114, 'center')
+
+	let name2 = sss.signature[1]
+	let name2Width = doc.getTextWidth(name2)
+	doc.text('Prepared by:', page.alignRight()-name2Width, prevTable + 60)
+	doc.text(name2, page.alignRight(), prevTable + 100, 'right')
+	doc.text(drawUnderline(name2Width), page.alignRight(), prevTable + 100, 'right')
+	doc.text('Social Worker', page.alignRight()-name2Width/2, prevTable + 114, 'center')
 	
+	
+
 	return doc
 }
 

@@ -30,5 +30,6 @@ let sss = {
 		{'RECOMMENDATION': 
 			['Sed a velit et enim condimentum ornare. Donec in mi suscipit, vehicula justo quis, tincidunt eros. Donec in placerat urna. Morbi eget viverra sem, eu hendrerit enim. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc rutrum mi ut gravida laoreet. Donec quis finibus neque. Duis in magna tincidunt, scelerisque purus sed, pharetra sem. Nullam auctor justo urna, et posuere orci consectetur eget. Sed sit amet augue venenatis felis mollis laoreet vitae eu lectus. Donec viverra quis tellus at convallis. Sed nisi ex, condimentum tincidunt ipsum in, rutrum bibendum purus.']
 		},
-	]
+	],
+	signature: ['GINA P. SAPLAGIO','LEAH JANE L. REDONA, RSW'],
 }
