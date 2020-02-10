@@ -36,16 +36,26 @@ function getBase64Image(img) {
 	return dataURL.replace(/^data:image\/(png|jpg);base64,/, '')
 }
 
-class pageClass {
+class Page {
 	size = {
 		a4: [612, 950],
 		legal: [612, 950],
 		short: [612, 950],
 	}
 	leftMargin = 45
-	constructor(format) {			
+	constructor(format = 'a4', orientation = 'p') {			
 		if (this.size.hasOwnProperty(format)) {
-			this.format = this.size[format]
+			switch(orientation) {
+				case 'p':
+					this.format = this.size[format]
+				break;
+				case 'l':
+	 				this.landscape = [this.size[format][1], this.size[format][0]]
+	 				this.format = this.landscape
+				break;
+				default:
+				// code block
+			}
 		}else {
 			this.format = this.size['a4']
 		}
@@ -68,7 +78,8 @@ function docAddGovHeader(doc) {
 	offsetY = 50
 	strSpacing = 15
 	strHeadMargin = 30
-	doc.addImage(img.govLogo, 'PNG', page.alignLeft(), 42, 80, 80)
+	// doc.addImage(img.govLogo, 'PNG', page.alignLeft(), 42, 80, 80)
+	doc.addImage(img.govLogo, 'PNG', page.alignCenter()-261, 42, 80, 80)
 	doc.setFontSize(11)
 	doc.text('Republic of the Philippines', page.alignCenter(), offsetY, 'center')
 	doc.text('Province of Davao del Sur', page.alignCenter(), offsetY+14, 'center')
@@ -81,11 +92,26 @@ function docAddGovHeader(doc) {
 	doc.setFontSize(14)
 	let header = 'SOCIAL SERVICES' 
 	doc.text(header, page.alignCenter(), offsetY+78, 'center')
-	doc.line(page.alignLeft()+198, 131, page.getWidth()-243, 131)
+	doc.text(drawUnderline(doc.getTextWidth(header)), page.alignCenter(), offsetY+78, 'center')
 	setSizeAndFont(12, 'normal')
 	let strDate = 'Date: ______________'
 	let strDateSize = doc.getTextWidth(strDate)
 	doc.text(strDate, page.getWidth()-(strDateSize+page.leftMargin), offsetY+95,)
+
+}
+
+function drawUnderline(textWidth) {
+	let line = '_'
+	let lineSize = doc.getTextWidth(line)
+	let totalLines = Math.floor(textWidth / lineSize) 
+	let underline = ''
+	
+	for (i = 0; i < totalLines; i++) {
+		underline += line
+	}	
+
+	doc.setFontStyle('normal')
+	return underline
 }
 
 function setSizeAndFont(size, type){
@@ -96,7 +122,7 @@ function setSizeAndFont(size, type){
 }
 
 docs.sss = function() {
-	page = new pageClass('legal')
+	page = new Page('legal')
 	doc = new jsPDF('portrait', 'pt', page.format)
 
 	docAddGovHeader(doc)
@@ -139,8 +165,8 @@ docs.sss = function() {
 	})
 
 	sss.arrAnswers.map((row, index) => {
-		Object.entries(row).forEach(([key, value])=>{
-			let numeral = arrNumerals[index+2]
+		Object.entries(row).forEach(([key, value]) => {
+			let numeral = arrNumerals[index+2] + '.'
 			let title = key
 			let answer = []
 			answer.push(value)
@@ -168,8 +194,21 @@ docs.sss = function() {
 }
 
 docs.ss = function() {
-	page = new pageClass('legal')
+	page = new Page('legal')
 	doc = new jsPDF('portrait', 'pt', page.format)
+	docAddGovHeader(doc)
+	doc.setFontType('bold')
+	doc.text('Name of Client/Representative:',page.alignLeft() ,200)
+	doc.setFontType('normal')
+	doc.text('____________________________________________________',page.alignLeft()+178 ,200)
+	doc.text('Date of Birth:___________Place of Birth:___________Age:___Sex:___Civil Status:____________', page.alignLeft(), 230)
+
+	return doc
+}
+
+docs.school = function() {
+	page = new Page('legal', 'l')
+	doc = new jsPDF('landscape', 'pt', page.format)
 	docAddGovHeader(doc)
 
 	return doc
