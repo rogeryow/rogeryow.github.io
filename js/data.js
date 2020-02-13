@@ -1,4 +1,4 @@
-let sss = {
+const sss = {
 	arrIntro: [
 		{'Name': 'Roger Pantil'},
 		{'Age': '16'},
@@ -32,4 +32,19 @@ let sss = {
 		},
 	],
 	signature: ['GINA P. SAPLAGIO','LEAH JANE L. REDONA, RSW'],
+}
+
+const school = {
+	arrUsers: [
+		[['1'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+		[['2'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+		[['3'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+		[['4'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+		[['5'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+		[['6'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+		[['7'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+		[['8'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+		[['9'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+		[['10'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
+	]
 }

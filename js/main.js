@@ -77,7 +77,7 @@ class Page {
 	}
 }
 
-function docAddGovHeader(doc) {
+function docAddGovHeader(doc, title) {
 	offsetY = 50
 	strSpacing = 15
 	strHeadMargin = 30
@@ -93,7 +93,7 @@ function docAddGovHeader(doc) {
 	doc.setFontSize(11)
 	doc.text('CITY SPECIAL PROGRAM AND MANAGEMENT OFFICE', page.alignCenter(), offsetY+62, 'center')
 	doc.setFontSize(14)
-	let header = 'SOCIAL SERVICES' 
+	let header = title 
 	doc.text(header, page.alignCenter(), offsetY+78, 'center')
 	doc.text(drawUnderline(doc.getTextWidth(header) -5), page.alignCenter(), offsetY+78, 'center')
 	setSizeAndFont(12, 'normal')
@@ -129,7 +129,7 @@ docs.sss = function() {
 	page = new Page('legal')
 	doc = new jsPDF('portrait', 'pt', page.format)
 
-	docAddGovHeader(doc)
+	docAddGovHeader(doc, 'SOCIAL SERVICES')
 	setSizeAndFont(10, 'bold')
 	doc.text('SOCIAL CASE STUDY', page.alignCenter(), offsetY+115, 'center')
 	doc.setFontSize(12)
@@ -232,7 +232,31 @@ docs.ss = function() {
 docs.school = function() {
 	page = new Page('legal', 'l')
 	doc = new jsPDF('landscape', 'pt', page.format)
-	docAddGovHeader(doc)
+	docAddGovHeader(doc, 'EDUCATIONAL ASSISTANCE')
+
+	doc.autoTable({
+		startY: 200,
+		head: [
+		[['ID'], ['Name'], ['Address'], ['Course'], ['Year'], ['Amount'], ['Remarks']]
+		],
+		body: school.arrUsers,
+		theme: 'grid',	
+		headStyles:{
+			fillColor: '#f2f2f2',
+			cellPadding: 5,
+			halign: 'center',
+        	valign: 'middle',
+		},
+		styles: {
+			overflow: 'linebreak',
+			halign: 'justify',
+			fontSize: 12,
+			cellPadding: 5,
+			halign: 'center',
+			textColor: '#000',
+		},
+
+	})
 
 	return doc
 }
