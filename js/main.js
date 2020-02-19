@@ -234,8 +234,14 @@ docs.school = function() {
 	doc = new jsPDF('landscape', 'pt', page.format)
 	docAddGovHeader(doc, 'EDUCATIONAL ASSISTANCE')
 
+	let addMargin = 40
+	doc.setFontType('bold')
+	doc.text(school.header, page.alignCenter()-40 + addMargin, 165, 'center')
+	doc.text('School: '+ school.name, page.alignLeft() + addMargin, 190)
+
 	doc.autoTable({
 		startY: 200,
+		margin: { left: 85 },
 		head: [
 		[['ID'], ['Name'], ['Address'], ['Course'], ['Year'], ['Amount'], ['Remarks']]
 		],
@@ -250,13 +256,51 @@ docs.school = function() {
 		styles: {
 			overflow: 'linebreak',
 			halign: 'justify',
-			fontSize: 12,
-			cellPadding: 5,
+			fontSize: 9,
+			cellPadding: 3,
+			valign: 'middle',
 			halign: 'center',
 			textColor: '#000',
 		},
-
+		willDrawCell: function (data) {
+	        let rows = data.table.body;
+	        if (data.row.index === rows.length - 1) {
+	        	doc.setFontType('bold')
+	            doc.setFillColor(241, 241, 241);
+	        }
+    	},
 	})
+	let tableLastY = doc.previousAutoTable.finalY
+	console.log(tableLastY)
+
+	doc.setFontType('normal')
+	let prevTable = doc.previousAutoTable.finalY - 30 
+
+	if(tableLastY > 500) {
+		prevTable = 0
+		doc.addPage()	
+	}
+	let name1 = school.signature[0]
+	let name1Width = doc.getTextWidth(name1)
+	doc.text('Prepared By:', page.alignLeft() + addMargin, prevTable + 60)
+	doc.text(name1, page.alignLeft() + addMargin, prevTable + 100)
+	doc.text(drawUnderline(name1Width), page.alignLeft() + addMargin, prevTable + 100)
+	doc.setFontType('bold')
+	doc.text('EXECUTIVE ASSISTANT', page.alignLeft()+ name1Width/2 + addMargin, prevTable + 114, 'center')
+
+	let name2 = school.signature[1]
+	let name2Width = doc.getTextWidth(name2)
+	doc.setFontType('normal')
+	doc.text('Approved by:', page.alignRight()-name2Width, prevTable + 60)
+	doc.text(name2, page.alignRight(), prevTable + 100, 'right')
+	doc.text(drawUnderline(name2Width), page.alignRight(), prevTable + 100, 'right')
+	doc.setFontType('bold')
+	doc.text('MAYOR', page.alignRight()-name2Width/2, prevTable + 114, 'center')
+
+	var width = doc.internal.pageSize.getWidth();
+	var height = doc.internal.pageSize.getHeight();
+	console.log(width)
+	console.log(height)
 
 	return doc
 }
