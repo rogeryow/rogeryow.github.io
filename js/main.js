@@ -195,7 +195,13 @@ docs.sss = function() {
 	})
 
 	doc.setFontType('normal')
-	let prevTable = doc.previousAutoTable.finalY + 35
+	let tableLastY = doc.previousAutoTable.finalY
+	let prevTable = doc.previousAutoTable.finalY - 30 
+	console.log(tableLastY)
+	if(tableLastY > 850) {
+		prevTable = 0
+		doc.addPage()	
+	}
 
 	let name1 = sss.signature[0]
 	let name1Width = doc.getTextWidth(name1)
@@ -310,7 +316,7 @@ function addPageNumber(x, y) {
 	let pageY = y || height - 20
 	doc.setFontType('normal')
 	var pageCount = doc.internal.getNumberOfPages()
-	doc.setTextColor('241', '241', '241')
+	doc.setTextColor('gray')
 	for(i = 0; i < pageCount; i++) { 
 		doc.setPage(i); 
 		doc.text(pageX, pageY, 'Page ' + doc.internal.getCurrentPageInfo().pageNumber + " of " + pageCount)
