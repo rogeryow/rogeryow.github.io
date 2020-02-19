@@ -35,8 +35,8 @@ const sss = {
 }
 
 const school = {
-	header: '2ND SEMESTER 2019 - 2021 SCHOOL YEAR',
-	name: 'Cor Jesu College',
+	header: '2ND SEMESTER 2019 - 2021',
+	name: 'UNIVERSITY OF MINDANAO DIGOS COLLEGE',
 	arrUsers: [
 		[['1'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],
 		[['2'], ['Roger Pantil'], ['Roxas Ext.'], ['Bachelor of Science in Information Technology'], ['2019'], ['10,000'], ['Best School Ever']],

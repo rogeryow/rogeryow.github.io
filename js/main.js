@@ -211,7 +211,7 @@ docs.sss = function() {
 	doc.text(drawUnderline(name2Width), page.alignRight(), prevTable + 100, 'right')
 	doc.text('Social Worker', page.alignRight()-name2Width/2, prevTable + 114, 'center')
 	
-	
+	addPageNumber(40)
 
 	return doc
 }
@@ -232,12 +232,14 @@ docs.ss = function() {
 docs.school = function() {
 	page = new Page('legal', 'l')
 	doc = new jsPDF('landscape', 'pt', page.format)
-	docAddGovHeader(doc, 'EDUCATIONAL ASSISTANCE')
+	docAddGovHeader(doc, 'EDUCATIONAL ASSISTANCE LIST')
 
 	let addMargin = 40
 	doc.setFontType('bold')
-	doc.text(school.header, page.alignCenter()-40 + addMargin, 165, 'center')
-	doc.text('School: '+ school.name, page.alignLeft() + addMargin, 190)
+	// old 165, 190
+	doc.text(school.name, page.alignCenter()-40 + addMargin, 167, 'center')
+	doc.setFontType('normal')
+	doc.text(school.header, page.alignCenter()-40 + addMargin, 183, 'center')
 
 	doc.autoTable({
 		startY: 200,
@@ -271,7 +273,6 @@ docs.school = function() {
     	},
 	})
 	let tableLastY = doc.previousAutoTable.finalY
-	console.log(tableLastY)
 
 	doc.setFontType('normal')
 	let prevTable = doc.previousAutoTable.finalY - 30 
@@ -297,12 +298,23 @@ docs.school = function() {
 	doc.setFontType('bold')
 	doc.text('MAYOR', page.alignRight()-name2Width/2, prevTable + 114, 'center')
 
-	var width = doc.internal.pageSize.getWidth();
-	var height = doc.internal.pageSize.getHeight();
-	console.log(width)
-	console.log(height)
+	let x = 84
+	addPageNumber(x)
 
 	return doc
+}
+
+function addPageNumber(x, y) {
+	let height = doc.internal.pageSize.getHeight()
+	let pageX = x || 40
+	let pageY = y || height - 20
+	doc.setFontType('normal')
+	var pageCount = doc.internal.getNumberOfPages()
+	doc.setTextColor('241', '241', '241')
+	for(i = 0; i < pageCount; i++) { 
+		doc.setPage(i); 
+		doc.text(pageX, pageY, 'Page ' + doc.internal.getCurrentPageInfo().pageNumber + " of " + pageCount)
+	}
 }
 
 function pdfDownload(doc) {
