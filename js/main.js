@@ -217,7 +217,7 @@ docs.sss = function() {
 	doc.text(drawUnderline(name2Width), page.alignRight(), prevTable + 100, 'right')
 	doc.text('Social Worker', page.alignRight()-name2Width/2, prevTable + 114, 'center')
 	
-	addPageNumber(40)
+	addPageNumber(44)
 
 	return doc
 }
@@ -312,11 +312,12 @@ docs.school = function() {
 
 function addPageNumber(x, y) {
 	let height = doc.internal.pageSize.getHeight()
+	let pageCount = doc.internal.getNumberOfPages()
 	let pageX = x || 40
-	let pageY = y || height - 20
+	let pageY = y || height - 25
 	doc.setFontType('normal')
-	var pageCount = doc.internal.getNumberOfPages()
 	doc.setTextColor('gray')
+	doc.setFontSize(10)
 	for(i = 0; i < pageCount; i++) { 
 		doc.setPage(i); 
 		doc.text(pageX, pageY, 'Page ' + doc.internal.getCurrentPageInfo().pageNumber + " of " + pageCount)
