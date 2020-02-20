@@ -217,7 +217,8 @@ docs.sss = function() {
 	doc.text(drawUnderline(name2Width), page.alignRight(), prevTable + 100, 'right')
 	doc.text('Social Worker', page.alignRight()-name2Width/2, prevTable + 114, 'center')
 	
-	addPageNumber(44)
+	let pageNumberX = 44
+	addPageNumber(pageNumberX)
 
 	return doc
 }
@@ -304,9 +305,26 @@ docs.school = function() {
 	doc.setFontType('bold')
 	doc.text('MAYOR', page.alignRight()-name2Width/2, prevTable + 114, 'center')
 
-	let x = 84
-	addPageNumber(x)
+	let pageNumberX = 84
+	addPageNumber(pageNumberX)
 
+	return doc
+}
+
+docs.dtr = function() {
+	doc = new jsPDF('portrait', 'pt', 'a4')
+
+	doc.autoTable({
+		startY: 10,
+		head: [
+			[['sample']]
+		],
+		body: dtr.sample,
+		theme: 'grid',	
+	})
+
+	addPageNumber()
+	console.log(getPageDim())
 	return doc
 }
 
@@ -322,6 +340,24 @@ function addPageNumber(x, y) {
 		doc.setPage(i); 
 		doc.text(pageX, pageY, 'Page ' + doc.internal.getCurrentPageInfo().pageNumber + " of " + pageCount)
 	}
+}
+
+
+function getPageWidth() {
+	let pageWitdh = doc.internal.pageSize.getWidth()
+	return pageWitdh 
+}
+
+function getPageHeight() {
+	let PageHeight = doc.internal.pageSize.getHeight() 
+	return PageHeight
+}
+
+function getPageDim() {
+	let pageDim = []
+	pageDim.push(getPageWidth())
+	pageDim.push(getPageHeight())
+	return pageDim
 }
 
 function pdfDownload(doc) {
