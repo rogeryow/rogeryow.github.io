@@ -1,9 +1,9 @@
-let docs = {}	
-let arrNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI']
-let btnPdf = document.getElementById('btnPDF')	
-let selDoc = document.getElementById('selDoc')
-let iframePdfId = 'iframePDF'
-
+const docs = {}	
+const arrNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI']
+const btnPdf = document.getElementById('btnPDF')	
+const selDoc = document.getElementById('selDoc')
+const iframePdfId = 'iframePDF'
+const strHeadIct = 'INFORMATION AND COMMUNICATION TECHNOLOGY DIVISION'
 selDoc.addEventListener('change', function() {
 	pdfToIframe(getPdfSrc(), iframePdfId)
 })
@@ -50,13 +50,15 @@ class Page {
 					this.format = this.size[format]
 				break;
 				case 'l':
-	 				this.landscape = [this.size[format][1], this.size[format][0]]
+					let width = this.size[format][1]
+					let height = this.size[format][0]
+	 				this.landscape = [width, height]
 	 				this.format = this.landscape
 				break;
 				default:
-				// code block
 			}
 		}else {
+			// default
 			this.format = this.size['a4']
 		}
 	}
@@ -77,29 +79,39 @@ class Page {
 	}
 }
 
-function docAddGovHeader(doc, title) {
+function docAddGovHeader(doc, option) {	
+	let dispTitle = option.title || ''
+	let fontSizeTitle = option.fontSizeTitle || 14 
+	let pageWidth = getPageWidth()
+	let pageCenter = pageWidth/2
+	let addMoreUnderLine = option.addMoreUnderLine || 0
+	let dispDate = typeof option.date !== 'undefined' ? option.date : true
 	offsetY = 50
 	strSpacing = 15
 	strHeadMargin = 30
-	// doc.addImage(img.govLogo, 'PNG', page.alignLeft(), 42, 80, 80)
-	doc.addImage(img.govLogo, 'PNG', page.alignCenter()-261, 42, 80, 80)
+	leftMargin = 45
+
+	doc.addImage(img.govLogo, 'PNG', pageCenter-261, 42, 80, 80)
 	doc.setFontSize(11)
-	doc.text('Republic of the Philippines', page.alignCenter(), offsetY, 'center')
-	doc.text('Province of Davao del Sur', page.alignCenter(), offsetY+14, 'center')
+	doc.text('Republic of the Philippines', pageCenter, offsetY, 'center')
+	doc.text('Province of Davao del Sur', pageCenter, offsetY+14, 'center')
 	doc.setFontType('bold')
-	doc.text('CITY OF DIGOS', page.alignCenter(), offsetY+31, 'center')
+	doc.text('CITY OF DIGOS', pageCenter, offsetY+31, 'center')
 	doc.setFontSize(14)
-	doc.text('OFFICE OF THE CITY MAYOR', page.alignCenter(), offsetY+48, 'center')
+	doc.text('OFFICE OF THE CITY MAYOR', pageCenter, offsetY+48, 'center')
 	doc.setFontSize(11)
-	doc.text('CITY SPECIAL PROGRAM AND MANAGEMENT OFFICE', page.alignCenter(), offsetY+62, 'center')
-	doc.setFontSize(14)
-	let header = title 
-	doc.text(header, page.alignCenter(), offsetY+78, 'center')
-	doc.text(drawUnderline(doc.getTextWidth(header) -5), page.alignCenter(), offsetY+78, 'center')
+	doc.text('CITY SPECIAL PROGRAM AND MANAGEMENT OFFICE', pageCenter, offsetY+62, 'center')
+	
+	doc.setFontSize(fontSizeTitle)
+	doc.text(dispTitle, pageCenter, offsetY+78, 'center')
+	doc.text(drawUnderline(doc.getTextWidth(dispTitle) -5 + addMoreUnderLine), pageCenter, offsetY+78, 'center')
 	setSizeAndFont(12, 'normal')
-	let strDate = 'Date: ______________'
-	let strDateSize = doc.getTextWidth(strDate)
-	doc.text(strDate, page.getWidth()-(strDateSize+page.leftMargin), offsetY+95,)
+
+	if(dispDate) {
+		let strDate = 'Date: ______________'
+		let strDateSize = doc.getTextWidth(strDate)
+		doc.text(strDate, pageWidth-(strDateSize+leftMargin), offsetY+95,)
+	}
 
 }
 
@@ -128,8 +140,10 @@ function setSizeAndFont(size, type){
 docs.sss = function() {
 	page = new Page('legal')
 	doc = new jsPDF('portrait', 'pt', page.format)
-
-	docAddGovHeader(doc, 'SOCIAL SERVICES')
+	option = {
+		title: 'SOCIAL SERVICES',
+	}
+	docAddGovHeader(doc, option)
 	setSizeAndFont(10, 'bold')
 	doc.text('SOCIAL CASE STUDY', page.alignCenter(), offsetY+115, 'center')
 	doc.setFontSize(12)
@@ -197,7 +211,7 @@ docs.sss = function() {
 	doc.setFontType('normal')
 	let tableLastY = doc.previousAutoTable.finalY
 	let prevTable = doc.previousAutoTable.finalY - 30 
-	console.log(tableLastY)
+
 	if(tableLastY > 850) {
 		prevTable = 0
 		doc.addPage()	
@@ -226,7 +240,10 @@ docs.sss = function() {
 docs.ss = function() {
 	page = new Page('legal')
 	doc = new jsPDF('portrait', 'pt', page.format)
-	docAddGovHeader(doc)
+	let option = {
+		title: 'Social Service',
+	}
+	docAddGovHeader(doc, option)
 	doc.setFontType('bold')
 	doc.text('Name of Client/Representative:',page.alignLeft() ,200)
 	doc.setFontType('normal')
@@ -239,7 +256,10 @@ docs.ss = function() {
 docs.school = function() {
 	page = new Page('legal', 'l')
 	doc = new jsPDF('landscape', 'pt', page.format)
-	docAddGovHeader(doc, 'EDUCATIONAL ASSISTANCE LIST')
+	let option = {
+		title: 'EDUCATIONAL ASSISTANCE LIST',
+	}
+	docAddGovHeader(doc, option)
 
 	let addMargin = 40
 	doc.setFontType('bold')
@@ -313,18 +333,85 @@ docs.school = function() {
 
 docs.dtr = function() {
 	doc = new jsPDF('portrait', 'pt', 'a4')
+	option = {
+		title: strHeadIct,
+		date: false,
+		fontSizeTitle: 12,
+		addMoreUnderLine: 20,
+	}
+	docAddGovHeader(doc, option)
 
+	let leftMargin = 40
+
+	doc.setFontType('bold')
+	doc.text('Daily Time Record', getPageCenter(), 170, 'center')
+	
+	setSizeAndFont(11, 'bold')
+	doc.text('Name: ', leftMargin, 210)
+	setSizeAndFont(11, 'normal')
+	doc.text('Roger PAntil', leftMargin + 40, 210)
+
+	setSizeAndFont(11, 'bold')
+	doc.text('Start Date: ', leftMargin, 225)
+	setSizeAndFont(11, 'normal')
+	doc.text('1/1/2020', leftMargin + 60, 225)
+
+	setSizeAndFont(11, 'bold')
+	doc.text('End Date: ', leftMargin, 240)
+	setSizeAndFont(11, 'normal')
+	doc.text('1/31/2020', leftMargin + 60, 240)
+
+	let imgQrCode = img.qrCodeSamp
+	doc.addImage(imgQrCode, 'PNG', getPageWidth()-90, 200, 45, 45)
+	
 	doc.autoTable({
-		startY: 10,
+		startY: 270,
+		headStyles:{
+			fillColor: '#ffffff',
+			cellPadding: 5,
+			halign: 'center',
+        	valign: 'middle',
+		},
+		styles: {
+			overflow: 'linebreak',
+			halign: 'justify',
+			fontSize: 9,
+			cellPadding: 3,
+			valign: 'middle',
+			halign: 'center',
+			textColor: '#000',
+		},
+		theme: 'striped',	
 		head: [
-			[['sample']]
+			[[''], ['IN'], ['OUT'], ['IN'], ['OUT'], ['IN'], ['OUT']]
 		],
-		body: dtr.sample,
-		theme: 'grid',	
+		body: [
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], ['7:30 PM'], ['1:30 AM']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], ['7:30 PM'], ['1:30 AM']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], ['7:30 PM'], ['1:30 AM']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], ['7:30 PM'], ['1:30 AM']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], ['7:30 PM'], ['1:30 AM']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+			[['1/1/2020 We'], ['7:53 AM'], ['12:08 PM'], ['12:57 PM'], ['5:08 PM'], [''], ['']],
+		],
+
 	})
 
 	addPageNumber()
-	console.log(getPageDim())
+
 	return doc
 }
 
@@ -358,6 +445,11 @@ function getPageDim() {
 	pageDim.push(getPageWidth())
 	pageDim.push(getPageHeight())
 	return pageDim
+}
+
+function getPageCenter() {
+	let pageCenter = getPageWidth()/2
+	return pageCenter
 }
 
 function pdfDownload(doc) {
