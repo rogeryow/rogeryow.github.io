@@ -90,8 +90,9 @@ function docAddGovHeader(doc, option) {
 	strSpacing = 15
 	strHeadMargin = 30
 	leftMargin = 45
-
-	doc.addImage(img.govLogo, 'PNG', pageCenter-261, 42, 80, 80)
+	// original page header
+	// doc.addImage(img.govLogo, 'PNG', pageCenter-261, 42, 80, 80)
+	doc.addImage(img.govLogo, 'PNG', pageCenter-261, 30, 80, 80)
 	doc.setFontSize(11)
 	doc.text('Republic of the Philippines', pageCenter, offsetY, 'center')
 	doc.text('Province of Davao del Sur', pageCenter, offsetY+14, 'center')
@@ -411,6 +412,35 @@ docs.dtr = function() {
 	})
 
 	addPageNumber()
+
+	return doc
+}
+
+docs.guaranteeLetter = function() {
+	page = new Page('legal')
+	doc = new jsPDF('portrait', 'pt', page.format)
+	option = {
+		date: false,
+		fontSizeTitle: 12,
+	}
+	docAddGovHeader(doc, option)
+	doc.text('______________________________________________________________________________', page.leftMargin, 118)
+	doc.text('Control No._________', page.leftMargin, 140)
+	doc.setFontType('bold')
+	setSizeAndFont('13', 'bold')
+	doc.text('Guarantee Letter', page.alignCenter() , 140, 'center')
+	setSizeAndFont('12', 'normal')
+	doc.text('Date:_______________', page.alignRight() , 140, 'right')
+
+	setSizeAndFont('12', 'normal')
+	doc.text('_____________________', page.alignLeft(), 175)
+	doc.text('_____________________', page.alignLeft(), 195)
+	doc.text('_____________________', page.alignLeft(), 215)
+
+	// https://github.com/MrRio/jsPDF/issues/1016
+	doc.text("This is to inform you that the city Mayor's has approved financial assistance in the form of this", page.alignLeft(), 230, {maxWidth: page.getWidth() , align: 'justify'})
+
+
 
 	return doc
 }
