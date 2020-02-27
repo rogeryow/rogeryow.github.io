@@ -86,32 +86,35 @@ function docAddGovHeader(doc, option) {
 	let pageCenter = pageWidth/2
 	let addMoreUnderLine = option.addMoreUnderLine || 0
 	let dispDate = typeof option.date !== 'undefined' ? option.date : true
+	let yMargin = option.yMargin || 0
+	console.log(option)
+	console.log(yMargin)
 	offsetY = 50
 	strSpacing = 15
 	strHeadMargin = 30
 	leftMargin = 45
 	// original page header
 	// doc.addImage(img.govLogo, 'PNG', pageCenter-261, 42, 80, 80)
-	doc.addImage(img.govLogo, 'PNG', pageCenter-261, 30, 80, 80)
+	doc.addImage(img.govLogo, 'PNG', pageCenter-261, 30 + yMargin, 80, 80)
 	doc.setFontSize(11)
-	doc.text('Republic of the Philippines', pageCenter, offsetY, 'center')
-	doc.text('Province of Davao del Sur', pageCenter, offsetY+14, 'center')
+	doc.text('Republic of the Philippines', pageCenter, offsetY + yMargin, 'center')
+	doc.text('Province of Davao del Sur', pageCenter, offsetY + 14 + yMargin, 'center')
 	doc.setFontType('bold')
-	doc.text('CITY OF DIGOS', pageCenter, offsetY+31, 'center')
+	doc.text('CITY OF DIGOS', pageCenter, offsetY + 31 + yMargin, 'center')
 	doc.setFontSize(14)
-	doc.text('OFFICE OF THE CITY MAYOR', pageCenter, offsetY+48, 'center')
+	doc.text('OFFICE OF THE CITY MAYOR', pageCenter, offsetY + 48 + yMargin, 'center')
 	doc.setFontSize(11)
-	doc.text('CITY SPECIAL PROGRAM AND MANAGEMENT OFFICE', pageCenter, offsetY+62, 'center')
+	doc.text('CITY SPECIAL PROGRAM AND MANAGEMENT OFFICE', pageCenter, offsetY + 62 + yMargin, 'center')
 	
 	doc.setFontSize(fontSizeTitle)
 	doc.text(dispTitle, pageCenter, offsetY+78, 'center')
-	doc.text(drawUnderline(doc.getTextWidth(dispTitle) -5 + addMoreUnderLine), pageCenter, offsetY+78, 'center')
+	doc.text(drawUnderline(doc.getTextWidth(dispTitle) -5 + addMoreUnderLine), pageCenter, offsetY + 78 + yMargin, 'center')
 	setSizeAndFont(12, 'normal')
 
 	if(dispDate) {
 		let strDate = 'Date: ______________'
 		let strDateSize = doc.getTextWidth(strDate)
-		doc.text(strDate, pageWidth-(strDateSize+leftMargin), offsetY+95,)
+		doc.text(strDate, pageWidth-(strDateSize+leftMargin), offsetY+95 + yMargin)
 	}
 
 }
@@ -239,8 +242,8 @@ docs.sss = function() {
 }
 
 docs.ss = function() {
-	page = new Page('legal')
-	doc = new jsPDF('portrait', 'pt', page.format)
+	// page = new Page('legal')
+	doc = new jsPDF('portrait', 'pt', 'legal')
 	let option = {
 		title: 'Social Service',
 	}
@@ -251,6 +254,7 @@ docs.ss = function() {
 	doc.text('____________________________________________________',page.alignLeft()+178 ,200)
 	doc.text('Date of Birth:___________Place of Birth:___________Age:___Sex:___Civil Status:____________', page.alignLeft(), 230)
 
+	console.log(getPageDim())
 	return doc
 }
 
@@ -419,27 +423,39 @@ docs.dtr = function() {
 docs.guaranteeLetter = function() {
 	page = new Page('legal')
 	doc = new jsPDF('portrait', 'pt', page.format)
-	option = {
-		date: false,
-		fontSizeTitle: 12,
+
+	function tempGuaranteeLetter(option, margin) {
+		docAddGovHeader(doc, option)
+		doc.text('______________________________________________________________________________', page.leftMargin, 120 + margin)
+		doc.text('Control No.____________', page.leftMargin, 140 + margin)
+		doc.setFontType('bold')
+		setSizeAndFont('13', 'bold')
+		doc.text('Guarantee Letter', page.alignCenter() , 140 + margin, 'center')
+
+		setSizeAndFont('12', 'normal')
+		doc.text('Date:_____________', page.alignRight() - 3 , 140 + margin, 'right')
+		setSizeAndFont('12', 'normal')
+		doc.text('_____________________', page.alignLeft(), 175 + margin)
+		doc.text('_____________________', page.alignLeft(), 195 + margin)
+		doc.text('_____________________', page.alignLeft(), 215 + margin)
+
+		// https://github.com/MrRio/jsPDF/issues/1016
+		doc.text("This is to inform you that the city Mayor's has approved financial assistance in the form of this", page.alignLeft(), 250 + margin)
+		doc.text('guarantee letter for the __________________________ of patient ________________________', page.alignLeft(), 265 + margin)
+		doc.text("in the amount of __________________________________________________, (___________).", page.alignLeft(), 280 + margin)
+		doc.text('Thank you.', page.alignLeft() + 50, 320  + margin)
+		doc.text('Very truly yours,', page.alignRight() - 50, 320 + margin, 'right')
+		setSizeAndFont('15', 'bold')
+		doc.setFont('arial')
+		doc.text('JOSEF F. CAGAS', page.alignRight() - 20, 370 + margin, 'right')
+		
+		setSizeAndFont('12', 'normal')
+		doc.setFont('helvetica')
+		doc.text('city mayor', page.alignRight() - 50, 385 + margin, 'right')
 	}
-	docAddGovHeader(doc, option)
-	doc.text('______________________________________________________________________________', page.leftMargin, 118)
-	doc.text('Control No._________', page.leftMargin, 140)
-	doc.setFontType('bold')
-	setSizeAndFont('13', 'bold')
-	doc.text('Guarantee Letter', page.alignCenter() , 140, 'center')
-	setSizeAndFont('12', 'normal')
-	doc.text('Date:_______________', page.alignRight() , 140, 'right')
-
-	setSizeAndFont('12', 'normal')
-	doc.text('_____________________', page.alignLeft(), 175)
-	doc.text('_____________________', page.alignLeft(), 195)
-	doc.text('_____________________', page.alignLeft(), 215)
-
-	// https://github.com/MrRio/jsPDF/issues/1016
-	doc.text("This is to inform you that the city Mayor's has approved financial assistance in the form of this", page.alignLeft(), 230, {maxWidth: page.getWidth() , align: 'justify'})
-
+	
+	tempGuaranteeLetter(option = {date: false, fontSizeTitle: 12}, margin = 0)
+	tempGuaranteeLetter(option = {date: false, fontSizeTitle: 12, yMargin: 500}, margin = 500)
 
 
 	return doc
