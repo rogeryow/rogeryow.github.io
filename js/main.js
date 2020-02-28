@@ -428,20 +428,31 @@ docs.guaranteeLetter = function() {
 		docAddGovHeader(doc, option)
 		doc.text('______________________________________________________________________________', page.leftMargin, 120 + margin)
 		doc.text('Control No.____________', page.leftMargin, 140 + margin)
+		
+		
+		doc.text(guaranteeLetter.controlNum, page.leftMargin + 100, 140 + margin, 'center')
 		doc.setFontType('bold')
 		setSizeAndFont('13', 'bold')
 		doc.text('Guarantee Letter', page.alignCenter() , 140 + margin, 'center')
 
 		setSizeAndFont('12', 'normal')
 		doc.text('Date:_____________', page.alignRight() - 3 , 140 + margin, 'right')
+		doc.text(guaranteeLetter.date, page.alignRight() - 19 , 140 + margin, 'right')
 		setSizeAndFont('12', 'normal')
+
 		doc.text('_____________________', page.alignLeft(), 175 + margin)
 		doc.text('_____________________', page.alignLeft(), 195 + margin)
 		doc.text('_____________________', page.alignLeft(), 215 + margin)
+		
+		doc.text(guaranteeLetter.one, page.alignLeft() + 70, 175 + margin, 'center')
+		doc.text(guaranteeLetter.two, page.alignLeft() + 70, 195 + margin, 'center')
+		doc.text(guaranteeLetter.three, page.alignLeft() + 70, 215 + margin, 'center')
 
-		// https://github.com/MrRio/jsPDF/issues/1016
 		doc.text("This is to inform you that the city Mayor's has approved financial assistance in the form of this", page.alignLeft(), 250 + margin)
 		doc.text('guarantee letter for the __________________________ of patient ________________________', page.alignLeft(), 265 + margin)
+		doc.text(guaranteeLetter.type, page.alignLeft() + 210, 265 + margin, 'center')
+		doc.text(guaranteeLetter.name, page.alignLeft() + 433, 265 + margin, 'center')
+
 		doc.text("in the amount of __________________________________________________, (___________).", page.alignLeft(), 280 + margin)
 		doc.text('Thank you.', page.alignLeft() + 50, 320  + margin)
 		doc.text('Very truly yours,', page.alignRight() - 50, 320 + margin, 'right')

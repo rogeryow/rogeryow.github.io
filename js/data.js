@@ -99,3 +99,13 @@ const dtr = {
 		[['sample']],	
 	]
 }
+
+const guaranteeLetter = {
+	controlNum: '0918',
+	date: '2/28/2020',
+	one: 'One',
+	two: 'Two',
+	three: 'three',
+	name: 'Roger Pantil',
+	type: 'Hostpital Bill',
+}
